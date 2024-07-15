@@ -25,11 +25,13 @@
                     <input type="checkbox" class="form-check-input" 
                           (change)="completarTarea(i)" 
                           [checked]="tarea.completed">
-                    <span class="ms-2" [ngClass]="{'text-decoration-line-through': tarea.completed}">{{ tarea.descripcion }}</span>
+                          <!--<span class="ms-2" [ngClass]="{'text-decoration-line-through': tarea.completed}">{{ tarea.descripcion }}</span>-->
+                    <span class="ms-2">{{ tarea.descripcion }}</span>
                   </div>
                   <button class="btn btn-danger btn-sm" (click)="eliminarTarea(i)" *ngIf="!tarea.completed">X</button>
                 </li>
               </ul>
+              {{errorMessage}}
           </div>
         </div>
       </div>

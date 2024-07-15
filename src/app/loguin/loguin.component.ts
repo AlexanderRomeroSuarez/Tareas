@@ -16,7 +16,9 @@ import { CommonModule } from '@angular/common';
 export class LoguinComponent {
   loginForm!: FormGroup;
   errorMessage = '';
-
+  errorMessageUsername: string = '';
+  errorMessagePassword: string = '';
+  
   private fb = inject(FormBuilder);
   private authService=  inject(AuthService);
   private router=  inject(Router);

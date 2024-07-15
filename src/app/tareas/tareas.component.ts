@@ -13,12 +13,13 @@ import { CommonModule } from '@angular/common';
 })
 export class TareasComponent implements OnInit {
   usuario: string | null = null;
+  errorMessage: string = '';
   tareaForm!: FormGroup;
  tareasService = inject(TareasService);
-             fb = inject(FormBuilder);
-    authService = inject(AuthService);
+            fb = inject(FormBuilder);
+   authService = inject(AuthService);
+        tareas = this.tareasService.getTareas();
 
-  tareas = this.tareasService.getTareas();
   ngOnInit(): void {
     this.tareaForm = this.fb.group({
       descripcion: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9 ]*')]]
@@ -32,24 +33,31 @@ export class TareasComponent implements OnInit {
 
    addTarea(): void {
     if (this.tareaForm.valid) {
-      this.tareasService.addTarea(this.tareaForm.value.descripcion);
-      this.tareaForm.reset();
-      this.tareas = this.tareasService.getTareas(); // Actualiza la lista de tareas después de agregar
+        this.existeTarea();
     }
   }
 
+  existeTarea(){
+    const nuevaTarea = this.tareaForm.value.descripcion.trim();
+    if (this.tareas.some(tarea => tarea.descripcion === nuevaTarea)) {
+      this.errorMessage = 'La tarea ya existe';
+      return;
+    }
+    this.tareasService.addTarea(this.tareaForm.value.descripcion);
+    this.tareaForm.reset();
+    this.tareas = this.tareasService.getTareas(); // Actualiza la lista de tareas después de agregar
+    this.errorMessage = '';
+  }
 
   onKeydown(event: any) {
     if (event.key === "Enter") {
-      this.tareasService.addTarea(this.tareaForm.value.descripcion);
-      this.tareaForm.reset();
-      this.tareas = this.tareasService.getTareas(); // Actualiza la lista de tareas después de agregar
-   
+      this.existeTarea(); 
     }
   }
 
   eliminarTarea(index: number): void {
     this.tareasService.deleteTarea(index);
+    this.errorMessage = '';
   }
 
   completarTarea(index: number): void {
