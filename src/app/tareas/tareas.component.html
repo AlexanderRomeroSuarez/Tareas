@@ -1,39 +1,185 @@
 <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h4 class="card-title mb-0">Lista de Tareas</h4>
-                <span class="user-display">Usuario: {{ usuario }}</span>
+  <h2 class="mb-4">Gestión de Usuario y Tareas</h2>
+  <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+
+    <a class="**" [routerLink]="['/details-tareas', 250]">Detalles</a>
+
+    <div class="form-group mb-4" hasActiveBooleam>
+     
+      <label for="usuario">Usuario</label>
+      <div #us></div>
+      {{ username }}
+      <input
+        type="text"
+        id="usuario"
+        class="form-control"
+        formControlName="usuario"
+        placeholder="Ingresa el nombre de usuario"
+        [ngClass]="{ 'is-invalid': esCampoInvalidoControl('usuario') }"
+      />
+      @if (esCampoInvalidoControl('usuario')) {
+      <div class="invalid-feedback">El nombre del usuario es requerido.</div>
+      }
+    </div>
+
+    <div class="form-group mb-4">
+      <label for="contraseña">Contraseña</label>
+      <input
+        type="password"
+        id="contraseña"
+        class="form-control"
+        formControlName="contraseña"
+        placeholder="Ingresa la contraseña"
+        [ngClass]="{ 'is-invalid': esCampoInvalidoControl('contraseña') }"
+      />
+      @if (esCampoInvalidoControl('contraseña')) {
+      <div class="invalid-feedback">La contraseña es requerida.</div>
+      }
+    </div>
+
+    <h4 class="mb-3">Tareas</h4>
+    <div formArrayName="tareas">
+      <div
+        *ngFor="let tarea of tareas.controls; let i = index"
+        [formGroupName]="i"
+        class="tarea-group"
+      >
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="descripcion{{ i }}">Descripción</label>
+            <input
+              type="text"
+              id="descripcion{{ i }}"
+              class="form-control"
+              formControlName="descripcion"
+              placeholder="Descripción de la tarea"
+              [ngClass]="{ 'is-invalid': esCampoInvalido(i, 'descripcion') }"
+            />
+            @if (esCampoInvalido(i, 'descripcion')) {
+            <div class="invalid-feedback">La descripción es requerida.</div>
+            } @if (tareas.at(i).get('descripcion')?.errors?.['maxlength']) {
+            <div class="invalid-feedback">
+              La descripción no puede exceder los 100 caracteres.
+            </div>
+            }
+          </div>
+
+          <div class="form-group col-md-3">
+            <label>Completada</label>
+            <div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="completedNo{{ i }}"
+                  formControlName="completed"
+                  [value]=true
+                  [ngClass]="{ 'is-invalid': esCampoInvalido(i, 'completed') }"
+                />
+                <label class="form-check-label" for="completedNo{{ i }}">SI</label>
               </div>
-         
-          <div class="card-body">
-            <form [formGroup]="tareaForm" (ngSubmit)="addTarea()">
-            
-              <div class="input-group mb-3">
-                <label for="descripcion" class="form-label me-3">Tarea: </label>
-                 <input type="text" class="form-control" placeholder="Agregar tarea" 
-                  formControlName="descripcion" 
-                  aria-describedby="button-addon2" 
-                  (keydown.enter)="onKeydown($event)">
-                <button class="btn btn-primary" type="submit" [disabled]="!tareaForm.valid">Agregar</button>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="completedSi{{ i }}"
+                  formControlName="completed"
+                  [value]=false
+                  [ngClass]="{ 'is-invalid': esCampoInvalido(i, 'completed') }"
+                />
+                <label class="form-check-label" for="completedSi{{ i }}">NO</label>
               </div>
-            </form>
-            <ul class="list-group">
-                <li *ngFor="let tarea of tareas; let i = index" class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="{'completed': tarea.completed}">
-                  <div class="d-flex align-items-center">
-                    <input type="checkbox" class="form-check-input" 
-                          (change)="completarTarea(i)" 
-                          [checked]="tarea.completed">
-                          <!--<span class="ms-2" [ngClass]="{'text-decoration-line-through': tarea.completed}">{{ tarea.descripcion }}</span>-->
-                    <span class="ms-2">{{ tarea.descripcion }}</span>
-                  </div>
-                  <button class="btn btn-danger btn-sm" (click)="eliminarTarea(i)" *ngIf="!tarea.completed">X</button>
-                </li>
-              </ul>
-              {{errorMessage}}
+            </div>
+            <div *ngIf="esCampoInvalido(i, 'completed')" class="invalid-feedback">Este campo es requerido.</div>
+          </div>
+
+          <div >
+          <div class="form-group col-md-3" *appValidacionNgIf="shouldShow">
+            <label for="fechaCreacion{{ i }}" >Fecha de Creación</label>
+            <input 
+              type="date"
+              id="fechaCreacion{{ i }}"
+              class="form-control"
+              formControlName="fechaCreacion"
+              [ngClass]="{ 'is-invalid': esCampoInvalido(i, 'fechaCreacion') }"
+            />
+            @if (esCampoInvalido(i, 'fechaCreacion')) {
+            <div class="invalid-feedback">
+              La fecha de creación es requerida.
+            </div>
+            }
+          </div>
+
+          <div class="form-group col-md-3" *appValidacionNgIf="shouldShow">
+            <label for="fechaVencimiento{{ i }}">Fecha de Vencimiento</label>
+            <input
+              type="date"
+              id="fechaVencimiento{{ i }}"
+              class="form-control"
+              #fechaVencimiento
+              formControlName="fechaVencimiento"
+              [ngClass]="{
+                'is-invalid': esCampoInvalido(i, 'fechaVencimiento')
+              }"
+            />
+            @if (esCampoInvalido(i, 'fechaVencimiento')) {
+            <div class="invalid-feedback">
+              La fecha de vencimiento es requerida.
+            </div>
+            } @if (esFechaInvalida(i)) {
+            <div class="text-danger">
+              {{ esFechaInvalida(i) }}
+            </div>
+            }
+          </div>
+      </div>
+
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="prioridad{{ i }}">Prioridad</label>
+            <input
+              type="text"
+              id="prioridad{{ i }}"
+              class="form-control"
+              formControlName="prioridad"
+              placeholder="Prioridad de la tarea"
+            />
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="estado{{ i }}">Estado</label>
+            <input
+              type="text"
+              id="estado{{ i }}"
+              class="form-control"
+              formControlName="estado"
+              placeholder="Estado de la tarea"
+            />
           </div>
         </div>
+
+        <button
+          type="button"
+          class="btn btn-danger mt-2"
+          (click)="removerTarea(i)"
+        >
+          <i class="bi bi-trash"></i> Eliminar Tarea
+        </button>
       </div>
     </div>
-  </div>
+
+    <button type="button" class="btn btn-primary mb-3" (click)="agregarTarea()">
+      <i class="bi bi-plus-circle"></i> Agregar Tarea
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-success"
+      [disabled]="usuarioForm.invalid"
+    >
+      <i class="bi bi-save"></i> Guardar
+    </button>
+  </form>
+</div>

@@ -1,15 +1,19 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+  const router= inject(Router);
+  const jwtHelper = inject(JwtHelperService);
 
-  if (authService.isLoggedIn()) {
-    return true;
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    return true; // El token es válido y no ha expirado
+    console.log('Token valido encontrado');
   } else {
-    router.navigate(['/login']); //Redirige a la página de login si no está autenticado
+    console.log('Token no encontrado');
+    router.navigate(['/loguin']); // Redirige a la página de login si el token no existe o ha expirado
     return false;
   }
 };

@@ -4,8 +4,9 @@ import { TareasComponent } from './tareas/tareas.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
-    { path: 'login', component: LoguinComponent },
-    { path: 'tareas', component: TareasComponent, canActivate: [authGuard] },
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: '**', redirectTo: '/login' }
-  ];
+  { path: 'loguin', loadChildren: () => import('./loguin/loguin.routes') },
+  { path: 'tareas', loadChildren: () => import('./tareas/tareas.routes') },
+  { path: 'details-tareas/:id', loadChildren: () => import('./details-tareas/details.routes') },
+  { path: '', redirectTo: '/loguin', pathMatch: 'full' },
+  { path: '**', redirectTo: '/loguin' },
+];

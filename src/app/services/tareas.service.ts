@@ -23,4 +23,9 @@ export class TareasService {
   completeTarea(index: number): void {
     this.tareas[index].completed = !this.tareas[index].completed;
   }
+
+  public isVisible(): Boolean {
+    return true;
+  }
+
 }

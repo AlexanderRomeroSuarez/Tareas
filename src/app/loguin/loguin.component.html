@@ -1,28 +1,38 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="large"
+  color="#fff"
+  type="ball-clip-rotate"
+  [fullScreen]="true"
+  ><p style="color: white">loading...</p></ngx-spinner
+>
+
 <div
   class="d-flex justify-content-center align-items-center vh-100 bg-primary text-white"
 >
   <div class="card p-4 bg-light text-dark" style="width: 400px">
     <div class="card-body">
       <h3 class="card-title text-center mb-4">Loguin</h3>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="loginForm">
         <div class="form-group mb-3">
           <label for="username" class="form-label">Username</label>
           <input
             type="text"
             id="username"
             class="form-control"
+            #userr
             formControlName="username"
-            [ngClass]="{
-              'is-invalid':
-                (userName.invalid && userName.touched) || errorMessage
-            }"
+            [class.invalid]="
+              loginForm.get('username')?.invalid &&
+              (loginForm.get('username')?.dirty ||
+                loginForm.get('username')?.touched)
+            "
           />
-          <div
-            *ngIf="(userName.invalid && userName.touched) || errorMessage"
-            class="invalid-feedback"
-          >
-            {{ errorMessage }}
-          </div>
+          @if (loginForm.get('username')?.errors?.['required'] &&
+          (loginForm.get('username')?.touched ||
+          loginForm.get('username')?.dirty ) ) {
+          <div>El usiuario es requerida.</div>
+          }
         </div>
         <div class="form-group mb-3">
           <label for="password" class="form-label">Password</label>
@@ -31,26 +41,20 @@
             id="password"
             class="form-control"
             formControlName="password"
-            [ngClass]="{
-              'is-invalid':
-                (password.invalid && password.touched) || errorMessage
-            }"
+            [class.invalid]="
+              loginForm.get('password')?.invalid &&
+              (loginForm.get('password')?.dirty ||
+                loginForm.get('password')?.touched)
+            "
           />
-          <div
-            *ngIf="(password.invalid && password.touched) || errorMessage"
-            class="invalid-feedback"
-          >
-            {{ errorMessage ? errorMessage : "Password is required." }}
-          </div>
+          @if (loginForm.get('password')?.errors?.['required'] &&
+          (loginForm.get('password')?.touched ||
+          loginForm.get('password')?.dirty ) ) {
+          <div>El password es requerida.</div>
+          }
         </div>
         <div class="d-grid gap-2">
-          <button
-            type="submit"
-            class="btn btn-primary"
-            [disabled]="!loginForm.valid"
-          >
-            Login
-          </button>
+          <button type="button" class="btn btn-primary" #onSubmit>Login</button>
         </div>
       </form>
     </div>

@@ -1,56 +1,102 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, 
-         FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  ElementRef,
+  inject,
+  Signal,
+  viewChild,
+  ViewChild,
+  signal,
+  effect,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-
+import { ToastrService } from 'ngx-toastr';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { fromEvent } from 'rxjs';
+import { SharedDataServiceService } from '../services/shared-data-service.service';
+//se instaló para el loading al loguearse --> npm install ngx-spinner
 @Component({
   selector: 'app-loguin',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, NgxSpinnerModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './loguin.component.html',
-  styleUrl: './loguin.component.scss'
+  styleUrl: './loguin.component.scss',
 })
 export class LoguinComponent {
   loginForm!: FormGroup;
-  errorMessage = '';
-  errorMessageUsername: string = '';
-  errorMessagePassword: string = '';
-  
-  private fb = inject(FormBuilder);
-  private authService=  inject(AuthService);
-  private router=  inject(Router);
- 
+
+  #_fb = inject(NonNullableFormBuilder);
+  _authService = inject(AuthService);
+  _dataService = inject(SharedDataServiceService);
+  _router = inject(Router);
+  #_toastEvokeService = inject(ToastrService);
+  #_spinnerService = inject(NgxSpinnerService);
+  usernamed: string = '';
+
+  btn = viewChild<ElementRef | undefined>('onSubmit');
+
+  user = viewChild.required<ElementRef>('userr');
+
   ngOnInit(): void {
-    this.loginForm = this.fb.nonNullable.group({
+    this.loginForm = this.#_fb.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
-  get userName() : FormControl<string> {
-    return this.loginForm.get('username')?.value
+  constructor() {
+    effect(() => {
+      this.user()?.nativeElement.focus();
+
+      this.btn()?.nativeElement.addEventListener('click', () => {
+        if (this.loginForm.valid) {
+          const { username, password } = this.loginForm.getRawValue();
+          this.#_spinnerService.show();
+          setTimeout(() => {
+            this._authService
+              .login({ usuario: username, password: password })
+              .subscribe({
+                next: (response) => {
+                  this.#_spinnerService.hide();
+
+                  this.usernamed = this.user()?.nativeElement.value;
+                  console.log('Title: ', this.usernamed);
+
+                  this._router.navigate(['/tareas']);
+                },
+                error: (error) => {
+                  this.#_spinnerService.hide();
+                },
+              });
+          }, 5000);
+        }
+      });
+    });
   }
 
-  get password(): FormControl<string>  {
-    return this.loginForm.get('password')?.value
-  }
-  
-  onSubmit(): void {
-    
-    if (this.loginForm.valid) {
-        const { username, password } = this.loginForm.value;
-    if (this.authService.login(username, password)) {
-        this.router.navigate(['/tareas']);
-    } else {
-        this.errorMessage = 'Usuario o contraseña incorrectos.';
-        this.userName.setErrors({ incorrect: true });
-        this.password.setErrors({ incorrect: true });
-    }
+  ngAfterViewInit() {}
+
+  get userName(): FormControl<string> {
+    return this.loginForm.get('username')?.value;
   }
 
+  get password(): FormControl<string> {
+    return this.loginForm.get('password')?.value;
   }
+
 
 }

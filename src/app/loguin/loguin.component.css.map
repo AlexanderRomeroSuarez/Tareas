@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAC;EACR,UAAU,EAAE,yDAAyD,CAAC,SAAS,CAAC,MAAM,CAAC,MAAM,CAAC,KAAK;EACnG,eAAe,EAAE,KAAK;CACvB;;AAED,AAAA,KAAK,CAAC;EACJ,eAAe,EAAE,UAAU;EAC3B,gBAAgB,EAAE,wBAAwB;CAC3C;;AAED,AAAA,QAAQ,CAAC;EACP,YAAY,EAAE,OAAO;CACtB;;AAED,AAAA,iBAAiB,CAAC;EAChB,OAAO,EAAE,KAAK;CACf",
+    "sources": [
+        "loguin.component.scss"
+    ],
+    "names": [],
+    "file": "loguin.component.css"
+}

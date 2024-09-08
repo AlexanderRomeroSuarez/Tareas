@@ -1,5 +1,4 @@
 /* usuario-form.component.css */
-
 /* Estilo para el contenedor principal */
 .container {
   max-width: 800px;
@@ -7,7 +6,8 @@
   padding: 20px;
   background-color: #f7f7f7;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Estilo para los encabezados */
@@ -27,7 +27,8 @@ h2, h4 {
 .form-control:focus {
   border-color: #80bdff;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 /* Estilo para los botones */
@@ -69,7 +70,9 @@ h2, h4 {
 .is-invalid {
   color: #dc3545;
 }
+
 /* Estilo para los iconos de los botones */
 .btn i {
   margin-right: 5px;
 }
+/*# sourceMappingURL=tareas.component.css.map */
