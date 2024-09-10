@@ -30,6 +30,6 @@ export class DetailsTareasComponent {
         this.productId = params.get('id');
      })*/
 
-     console.log("El código del product es : " + this.Id);     
+     console.log("El código del product es------ : " + this.Id);     
   }
 }
