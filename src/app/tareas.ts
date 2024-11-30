@@ -1,4 +1,4 @@
 export interface Tareas {
-    descripcion: string;
+  descripcion: string;
   completed: boolean;
 }

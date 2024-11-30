@@ -49,7 +49,7 @@ export class TareasComponent implements OnInit {
   }
 
   eliminarTarea(index: number): void {
-    this.tareasService.deleteTarea(index);
+    this.tareasService.deleteTarea(index); //Elimina las tares despúes de agregar 
   }
 
   completarTarea(index: number): void {
