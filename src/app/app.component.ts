@@ -12,5 +12,6 @@ import { TareasComponent } from './tareas/tareas.component';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'TareasApp';
+  title = 'Listado de Tareas en App.component';
+  boolean =  true;
 }
