@@ -43,7 +43,7 @@ export class LoguinComponent {
     if (this.authService.login(username, password)) {
         this.router.navigate(['/tareas']);
     } else {
-        this.errorMessage = 'Usuario o contraseña incorrectos.';
+        this.errorMessage = 'Usuario y/o contraseña incorrecto';
         this.userName.setErrors({ incorrect: true });
         this.password.setErrors({ incorrect: true });
     }
