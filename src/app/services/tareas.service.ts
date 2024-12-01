@@ -13,7 +13,7 @@ export class TareasService {
   }
 
   addTarea(descripcion: string): void {
-    this.tareas.push({ descripcion, completed: false });
+    this.tareas.push({ descripcion, completed: true });
   }
 
   deleteTarea(index: number): void {

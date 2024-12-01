@@ -21,7 +21,7 @@ export class TareasComponent implements OnInit {
   tareas = this.tareasService.getTareas();
   ngOnInit(): void {
     this.tareaForm = this.fb.group({
-      descripcion: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9 ]*')]]
+      descripcion: ['', [Validators.required]]
     });
     this.usuario = this.authService.getUser();
   }
