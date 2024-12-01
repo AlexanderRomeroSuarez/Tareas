@@ -13,5 +13,7 @@ import { LoguinComponent } from './loguin/loguin.component';
 export class AppComponent {
   title = 'Listado de Tareas en App.component';
   title2 = 'Listado de Tareas en App.component';
+  title3 = 'Listado de Tareas en App.component 3';
+  title4 = 'Listado de Tareas en App.component 4';
   boolean =  true;
 }
