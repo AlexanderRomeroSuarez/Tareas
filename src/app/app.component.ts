@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { LoguinComponent } from './loguin/loguin.component';
-import { TareasComponent } from './tareas/tareas.component';
 
 @Component({
   selector: 'app-root',
