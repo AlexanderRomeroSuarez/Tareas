@@ -12,5 +12,6 @@ import { LoguinComponent } from './loguin/loguin.component';
 })
 export class AppComponent {
   title = 'Listado de Tareas en App.component';
+  title2 = 'Listado de Tareas en App.component';
   boolean =  true;
 }
